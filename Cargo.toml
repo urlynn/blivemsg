@@ -1,0 +1,93 @@
+[package]
+name = "blivemsg"
+version = "0.2.3"
+edition = "2024"
+description = "Bilibili Live Message Library - 轻量高效的B站直播消息 Rust 库 - 支持 52+ 消息类型 - 轻量、快速、模块化"
+license = "MIT"
+repository = "https://github.com/urlynn/blivemsg"
+documentation = "https://docs.rs/blivemsg"
+keywords = ["bilibili", "danmaku", "live", "websocket", "streaming"]
+categories = ["api-bindings", "network-programming"]
+changelog = "CHANGELOG.md"
+readme = "README_CRATES.md"
+
+# ==================== 目标配置 ====================
+[lib]
+name = "blivemsg"
+path = "src/lib.rs"
+
+[[bin]]
+name = "blivemsg-cli"
+path = "src/bin/cli.rs"
+required-features = ["cli"]
+
+# ==================== Features 配置 ====================
+[features]
+default = ["http-reqwest"]
+
+# CLI 工具
+cli = [
+    "dep:clap",
+    "dep:toml",           
+    "protobuf-support", 
+]
+
+# Protobuf 支持（可选，用于 INTERACT_WORD_V2 消息）
+protobuf-support = ["dep:prost", "dep:bytes", "dep:base64"]
+
+# HTTP 客户端后端（二选一）
+http-wreq = ["dep:wreq"]
+http-reqwest = ["dep:reqwest"]
+
+# ==================== 核心依赖 ====================
+[dependencies]
+tokio = { version = "1.52.3", features = ["rt-multi-thread", "macros", "time", "net"] }
+tokio-stream = "0.1.18"
+tokio-tungstenite = { version = "0.29.0", features = ["rustls-tls-native-roots"] }
+rustls = { version = "0.23", default-features = false, features = ["ring"] } 
+futures-util = "0.3.32"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
+brotli = "8.0.2"
+flate2 = "1.1.9"
+md-5 = "0.11.0"
+hex = "0.4.3"
+thiserror = "2.0.17"
+
+# HTTP 客户端（可选，二选一）
+wreq = { version = "5.3", optional = true }
+reqwest = { version = "0.12", default-features = false, features = [
+    "rustls-tls-native-roots",
+    "json",
+    "cookies",
+], optional = true }
+
+# ==================== 可选依赖 ====================
+# CLI 工具依赖
+clap = { version = "4.6.1", features = ["derive"], optional = true }
+toml = { version = "0.9.8", optional = true }
+
+# Protobuf 支持
+prost = { version = "0.14.3", optional = true }
+bytes = { version = "1.11.1", optional = true }
+base64 = { version = "0.22.1", optional = true }
+
+# 浏览器指纹模拟
+wreq-util = { version = "2.2.6", optional = true }
+
+# ==================== Profile ====================
+[profile.release]
+opt-level = "z"     
+lto = true        
+codegen-units = 1       
+panic = "abort"     
+strip = true        
+
+# ==================== Release ====================
+include = [
+    "src/**/*",
+    "Cargo.toml",
+    "LICENSE",
+    "README_CRATES.md",
+    "CHANGELOG.md",
+]

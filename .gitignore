@@ -1,0 +1,10 @@
+target/
+dist/
+*.log
+*.txt
+.DS_Store
+None
+backups/
+docs/old/
+cookies.json
+example.config.toml
