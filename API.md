@@ -58,7 +58,7 @@ client.start().await?;
 
 所有消息类型的枚举，共 52 种。
 
-#### 用户消息（11种）
+#### 用户消息（9种）
 
 - `Danmu` - 弹幕
 - `Gift` - 礼物
@@ -66,7 +66,6 @@ client.start().await?;
 - `GuardBuy` - 开通舰长/提督/总督
 - `WelcomeGuard` - 欢迎总督/提督
 - `ComboSend` - 礼物连击
-- `UserToastMsg` / `UserToastMsgV2` - 用户 Toast
 - `LikeInfoV3Click` - 点赞
 - `EntryEffect` - 入场特效
 - `InteractWordV2` - 进入直播间（需 `protobuf-support` feature）
