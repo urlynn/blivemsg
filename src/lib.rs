@@ -1,6 +1,6 @@
-//! # blivemsg - B站直播消息客户端库
+//! # blivemsg - Bilibili Live Message Library
 //!
-//! 一个轻量高效的异步B站直播消息客户端，支持B站直播所有消息类型。
+//! 一个轻量高效的异步B站直播消息客户端，支持 52+ B站直播消息类型。
 //!
 //! ## 快速开始
 //!
@@ -18,7 +18,7 @@
 //!     while let Some(message) = stream.next().await {
 //!         match message {
 //!             Message::Danmu(d) => println!("[{}] {}: {}", d.medal_level, d.username, d.content),
-//!             Message::Gift(g) => println!("{} 送了 {} x{}", g.username, g.gift_name, g.num),
+//!             Message::Gift(g) => println!("{} {}了 {} x{}", g.username, g.action ,g.gift_name, g.num),
 //!             _ => {}
 //!         }
 //!     }
@@ -33,7 +33,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), blivemsg::Error> {
-//!     let mut client = BliveClient::new(7734200, "cookies.json")?;
+//!     let mut client = BliveClient::from_cookie_string(7734200, "SESSDATA=xxx;buvid3=yyy".to_string())?;
 //!
 //!     client.on_danmu(|danmu| {
 //!         println!("[{}] {}: {}", danmu.medal_level, danmu.username, danmu.content);
@@ -46,13 +46,13 @@
 //! ## 架构说明
 //!
 //! - **[BliveClient]**: 核心客户端，负责建立和管理WebSocket连接
-//! - **[types::Message]**: 消息枚举，包含所有52种消息类型
+//! - **[types::Message]**: 消息枚举，包含所有52+种消息类型
 //! - **[Error]**: 统一错误类型
 //!
 //! ## 更多资源
 //!
 //! - **[GitHub](https://github.com/urlynn/blivemsg)** - 源码仓库、Issue 反馈
-//! - **[完整消息列表](https://github.com/urlynn/blivemsg/blob/main/MESSAGES.md)** - 52种消息详细说明
+//! - **[完整消息列表](https://github.com/urlynn/blivemsg/blob/main/MESSAGES.md)** - 52+种消息详细说明
 
 mod client;
 mod message;
@@ -74,10 +74,10 @@ pub mod types {
     
     pub use crate::message::Message;
     
-    // --- 用户消息 (14种) ---
+    // --- 用户消息 (9种) ---
     pub use crate::message::{
-        Danmu, Gift, SuperChat, GuardBuy, WelcomeGuard, ComboSend, 
-        UserToastMsg, LikeInfoV3Click, EntryEffect,
+        Danmu, Gift, ComboSend, SuperChat, GuardBuy, 
+        WelcomeGuard, LikeInfoV3Click, EntryEffect,
     };
     
     #[cfg(feature = "protobuf-support")]
@@ -85,7 +85,7 @@ pub mod types {
     
     // --- 系统消息 (38种) ---
     pub use crate::message::{
-        NoticeMsg, CommonNoticeDanmaku, Warning, CutOff, RoomBlockMsg,
+        UserToastMsg, NoticeMsg, CommonNoticeDanmaku, Warning, CutOff, RoomBlockMsg,
         RoomSilentOff, OnlineRankV2, OnlineRankV3, OnlineRankCount,
         RankChanged, RankChangedV2, RankRem, PopularRankChanged,
         HotRoomNotify, WatchedChange, PopularityChange, Live, Preparing,
