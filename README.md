@@ -103,7 +103,7 @@ message_types = ["DANMU_MSG", "SEND_GIFT"]
 
 ```toml
 [dependencies]
-blivemsg = "0.2.2"
+blivemsg = "0.2.4"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 futures-util = "0.3"
 ```
@@ -126,7 +126,7 @@ blivemsg = { version = "0.2.2", features = ["protobuf-support"] }
 # 选项 1: reqwest (纯 Rust后端, 编译友好)
 blivemsg = { version = "0.2.2", default-features = false, features = ["http-reqwest"] }
 
-# 选项 2: wreq (浏览器指纹模拟功能可选)
+# 选项 2: wreq (实验性选项)
 blivemsg = { version = "0.2.2", default-features = false, features = ["http-wreq"] }
 
 # 组合多个功能
@@ -180,9 +180,9 @@ async fn main() -> Result<(), blivemsg::Error> {
 |---------|------|----------|----------|
 | `cli` | CLI 工具（**自动包含 protobuf-support**） | clap, toml, prost, bytes, base64 | 需要命令行工具 |
 | `protobuf-support` | Protobuf 消息解析 | prost, bytes, base64 | 库用户需要 INTERACT_WORD_V2 消息 |
-| `http-wreq` | wreq HTTP 后端（浏览器指纹模拟） | wreq | 实验性选项; 可能增加稳定性 |
-| `http-reqwest` | reqwest HTTP 后端（默认，纯 Rust） | reqwest | 跨平台编译兼容性 |
-| 默认（无） | 核心库功能（使用 http-reqwest） | 无 | 作为库集成到其他项目 |
+| `http-wreq` | wreq HTTP 后端 | wreq | 实验性选项; 可能增加稳定性 |
+| `http-reqwest` | reqwest HTTP 后端（默认，rustls ring） | reqwest | 跨平台编译兼容 |
+| 默认（无） | 核心库功能（使用 http-reqwest + ring） | 无 | 作为库集成到其他项目 |
 
 **注意**: `http-wreq` 和 `http-reqwest` 只能选择一个，不能同时启用。
 
@@ -216,7 +216,7 @@ src/
 
 ## 📄 许可证
 
-MIT
+Apache-2.0 OR MIT
 
 ## 相关链接
 
@@ -227,6 +227,14 @@ MIT
 # 更新日志
 
 查看完整更新历史: [CHANGELOG.md](https://github.com/urlynn/blivemsg/blob/main/CHANGELOG.md)
+
+## [0.2.4] - 2026-06-03
+
+### 依赖更新
+- reqwest: 0.12 → 0.13（feature `rustls-tls-native-roots` → `rustls-no-provider`，由 rustls ring 提供加密）
+- md-5 → md5 0.8.0，签名简化
+- 移除 hex
+- 移除 wreq-util
 
 ## [0.2.3] - 2026-05-19
 

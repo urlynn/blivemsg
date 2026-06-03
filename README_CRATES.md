@@ -106,14 +106,14 @@ Cookie 包含以下两个字段:
 - **default**: 最小依赖，仅库功能（使用 http-reqwest）
 - **cli**: 启用 CLI 工具（需要 clap、toml）
 - **protobuf-support**: 启用 Protobuf 消息支持
-- **http-reqwest**: 使用 reqwest HTTP 后端（默认，纯 Rust）
-- **http-wreq**: 使用 wreq HTTP 后端（浏览器指纹模拟）
+- **http-reqwest**: 使用 reqwest HTTP 后端（默认，rustls ring）
+- **http-wreq**: 使用 wreq HTTP 后端 | 实验性选项; 可能增加稳定性
 
 **注意**: `http-wreq` 和 `http-reqwest` 只能选择一个。
 
 ## 📄 许可证
 
-MIT
+Apache-2.0 OR MIT
 
 ## 🔗 相关链接
 

@@ -1,5 +1,13 @@
 # 更新日志
 
+## [0.2.4] - 2026-06-03
+
+### 依赖更新
+- reqwest: 0.12 → 0.13（feature `rustls-tls-native-roots` → `rustls-no-provider`，由 rustls ring 提供加密）
+- md-5 → md5 0.8.0，签名简化
+- 移除 hex
+- 移除 wreq-util
+
 ## [0.2.3] - 2026-05-19
 
 #### 修复buvid3自动获取

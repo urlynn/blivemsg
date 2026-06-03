@@ -93,6 +93,11 @@ impl BliveClient {
     /// }
     /// ```
     pub async fn stream(&mut self) -> Result<impl Stream<Item = Message>, Error> {
+        // Ring crypto provider
+        static INIT: std::sync::Once = std::sync::Once::new();
+        INIT.call_once(|| {
+            let _ = rustls::crypto::ring::default_provider().install_default();
+        });
         let (rx, handle) = internal::ws::start_connection(self.room_id, &self.cookie_source).await?;
         self.task_handle = Some(handle);
         Ok(tokio_stream::wrappers::UnboundedReceiverStream::new(rx))

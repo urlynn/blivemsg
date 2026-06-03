@@ -165,7 +165,8 @@ pub async fn get_buvid(client: &Client, cookies: &str) -> Result<String, Error> 
         .send()
         .await?;
     
-    let buvid_resp: GetBuvidResponse = resp.json().await?;
+    let body = resp.bytes().await?;
+    let buvid_resp: GetBuvidResponse = serde_json::from_slice(&body)?;
     
     if buvid_resp.code == 0 && !buvid_resp.data.buvid.is_empty() {
         return Ok(buvid_resp.data.buvid);
@@ -180,8 +181,8 @@ fn add_wbi_sign(mut params: HashMap<String, String>, wbi_key: &str) -> HashMap<S
         return params;
     }
     
-    use md5::{Md5, Digest};
-    
+    use md5;
+
     let wts = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
@@ -210,10 +211,7 @@ fn add_wbi_sign(mut params: HashMap<String, String>, wbi_key: &str) -> HashMap<S
     str_to_sign.push_str(wbi_key);
     
     // MD5签名
-    let mut hasher = Md5::new();
-    hasher.update(str_to_sign.as_bytes());
-    let result = hasher.finalize();
-    let w_rid = hex::encode(result);
+    let w_rid = format!("{:x}", md5::compute(str_to_sign.as_bytes()));
     params.insert("w_rid".to_string(), w_rid);
     params
 }

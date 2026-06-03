@@ -438,6 +438,9 @@ fn print_plain_message(message: &Message) {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Ring crypto provider
+    #[cfg(feature = "http-reqwest")]
+    let _ = rustls::crypto::ring::default_provider().install_default();
     let args = Args::parse();
 
     // 加载配置文件（如果指定）

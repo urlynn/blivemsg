@@ -1,9 +1,9 @@
 [package]
 name = "blivemsg"
-version = "0.2.3"
+version = "0.2.4"
 edition = "2024"
 description = "Bilibili Live Message Library - 轻量高效的B站直播消息 Rust 库 - 支持 52+ 消息类型 - 轻量、快速、模块化"
-license = "MIT"
+license = "Apache-2.0 OR MIT"
 repository = "https://github.com/urlynn/blivemsg"
 documentation = "https://docs.rs/blivemsg"
 keywords = ["bilibili", "danmaku", "live", "websocket", "streaming"]
@@ -47,33 +47,30 @@ tokio-tungstenite = { version = "0.29.0", features = ["rustls-tls-native-roots"]
 rustls = { version = "0.23", default-features = false, features = ["ring"] } 
 futures-util = "0.3.32"
 serde = { version = "1.0.228", features = ["derive"] }
-serde_json = "1.0.149"
-brotli = "8.0.2"
+serde_json = "1.0.150"
+brotli = "8.0.3"
 flate2 = "1.1.9"
-md-5 = "0.11.0"
-hex = "0.4.3"
-thiserror = "2.0.17"
+md5 = "0.8.0"
+thiserror = "2.0.18"
 
 # HTTP 客户端（可选，二选一）
 wreq = { version = "5.3", optional = true }
-reqwest = { version = "0.12", default-features = false, features = [
-    "rustls-tls-native-roots",
+reqwest = { version = "0.13", default-features = false, features = [
+    "rustls-no-provider",
     "json",
     "cookies",
+    "query",
 ], optional = true }
 
 # ==================== 可选依赖 ====================
 # CLI 工具依赖
 clap = { version = "4.6.1", features = ["derive"], optional = true }
-toml = { version = "0.9.8", optional = true }
+toml = { version = "1.1.2", optional = true }
 
 # Protobuf 支持
 prost = { version = "0.14.3", optional = true }
 bytes = { version = "1.11.1", optional = true }
 base64 = { version = "0.22.1", optional = true }
-
-# 浏览器指纹模拟
-wreq-util = { version = "2.2.6", optional = true }
 
 # ==================== Profile ====================
 [profile.release]
